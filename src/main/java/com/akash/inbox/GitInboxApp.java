@@ -1,7 +1,11 @@
 package com.akash.inbox;
 
+import com.akash.inbox.emailList.EmailListItem;
+import com.akash.inbox.emailList.EmailListItemKey;
+import com.akash.inbox.emailList.EmailListItemRepository;
 import com.akash.inbox.folders.Folder;
 import com.akash.inbox.folders.FolderRepository;
+import com.datastax.oss.driver.api.core.uuid.Uuids;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,6 +19,7 @@ import reactor.core.publisher.Mono;
 
 import javax.annotation.PostConstruct;
 import java.nio.file.Path;
+import java.util.Arrays;
 
 @SpringBootApplication
 @RestController
@@ -22,6 +27,9 @@ public class GitInboxApp {
 
 	@Autowired
 	FolderRepository folderRepository;
+
+	@Autowired
+	EmailListItemRepository emailListItemRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(GitInboxApp.class, args);
@@ -43,6 +51,22 @@ public class GitInboxApp {
 		folderRepository.save(new Folder("pal-akash", "Inbox", "blue"));
 		folderRepository.save(new Folder("pal-akash", "Sent", "green"));
 		folderRepository.save(new Folder("pal-akash", "Important", "yellow"));
+
+		for (int i=0; i<10; i++){
+			EmailListItemKey key = new EmailListItemKey();
+			key.setId("pal-akash");
+			key.setLabel("Inbox");
+			key.setTimeUUID(Uuids.timeBased());
+
+			EmailListItem item = new EmailListItem();
+			item.setKey(key);
+			item.setTo(Arrays.asList("pal-akash"));
+			item.setSubject("Subject " + i);
+			item.setUnread(true);
+
+			emailListItemRepository.save(item);
+		}
+
 	}
 
 }
