@@ -1,5 +1,7 @@
 package com.akash.inbox;
 
+import com.akash.inbox.email.Email;
+import com.akash.inbox.email.EmailRepository;
 import com.akash.inbox.emailList.EmailListItem;
 import com.akash.inbox.emailList.EmailListItemKey;
 import com.akash.inbox.emailList.EmailListItemRepository;
@@ -31,6 +33,9 @@ public class GitInboxApp {
 	@Autowired
 	EmailListItemRepository emailListItemRepository;
 
+	@Autowired
+	EmailRepository emailRepository;
+
 	public static void main(String[] args) {
 		SpringApplication.run(GitInboxApp.class, args);
 	}
@@ -60,11 +65,21 @@ public class GitInboxApp {
 
 			EmailListItem item = new EmailListItem();
 			item.setKey(key);
-			item.setTo(Arrays.asList("pal-akash"));
+			item.setTo(Arrays.asList("pal-akash", "abc", "def"));
 			item.setSubject("Subject " + i);
 			item.setUnread(true);
 
+
+
 			emailListItemRepository.save(item);
+
+			Email email = new Email();
+			email.setId(key.getTimeUUID());
+			email.setFrom("pal-akash");
+			email.setSubject(item.getSubject());
+			email.setBody("Body " + i);
+			email.setTo(item.getTo());
+			emailRepository.save(email);
 		}
 
 	}
