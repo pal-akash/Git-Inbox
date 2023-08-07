@@ -21,7 +21,7 @@ public class EmailListItem {
     private String subject;
 
     @CassandraType(type = CassandraType.Name.BOOLEAN)
-    private Boolean isUnread;
+    public Boolean isUnread;
 
     @Transient
     private String agoTimeString;
