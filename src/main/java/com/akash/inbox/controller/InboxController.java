@@ -2,9 +2,7 @@ package com.akash.inbox.controller;
 
 import com.akash.inbox.emailList.EmailListItem;
 import com.akash.inbox.emailList.EmailListItemRepository;
-import com.akash.inbox.folders.Folder;
-import com.akash.inbox.folders.FolderRepository;
-import com.akash.inbox.folders.FolderService;
+import com.akash.inbox.folders.*;
 import com.datastax.oss.driver.api.core.uuid.Uuids;
 import org.ocpsoft.prettytime.PrettyTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Controller
 public class InboxController {
@@ -31,6 +30,7 @@ public class InboxController {
 
     @Autowired
     private EmailListItemRepository emailListItemRepository;
+
 
     @GetMapping(value = "/")
     public String homePage(@RequestParam(required = false) String folder, @AuthenticationPrincipal OAuth2User principal, Model model){
@@ -46,6 +46,8 @@ public class InboxController {
 
         List<Folder> defaultFolders = folderService.fetchDefaultFolder(userId);
         model.addAttribute("defaultFolders", defaultFolders);
+        model.addAttribute("stats", folderService.mapCountToLabels(userId));
+
 
         //Fetch messages
         if(!StringUtils.hasText(folder)){

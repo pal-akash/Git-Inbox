@@ -2,11 +2,13 @@ package com.akash.inbox;
 
 import com.akash.inbox.email.Email;
 import com.akash.inbox.email.EmailRepository;
+import com.akash.inbox.email.EmailService;
 import com.akash.inbox.emailList.EmailListItem;
 import com.akash.inbox.emailList.EmailListItemKey;
 import com.akash.inbox.emailList.EmailListItemRepository;
 import com.akash.inbox.folders.Folder;
 import com.akash.inbox.folders.FolderRepository;
+import com.akash.inbox.folders.UnreadEmailStatsRepository;
 import com.datastax.oss.driver.api.core.uuid.Uuids;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.PostConstruct;
+import java.lang.reflect.Array;
 import java.nio.file.Path;
 import java.util.Arrays;
 
@@ -31,10 +34,10 @@ public class GitInboxApp {
 	FolderRepository folderRepository;
 
 	@Autowired
-	EmailListItemRepository emailListItemRepository;
+	EmailService emailService;
 
 	@Autowired
-	EmailRepository emailRepository;
+	UnreadEmailStatsRepository unreadEmailStatsRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(GitInboxApp.class, args);
@@ -53,33 +56,12 @@ public class GitInboxApp {
 
 	@PostConstruct
 	public void init(){
-		folderRepository.save(new Folder("pal-akash", "Inbox", "blue"));
-		folderRepository.save(new Folder("pal-akash", "Sent", "green"));
-		folderRepository.save(new Folder("pal-akash", "Important", "yellow"));
+		folderRepository.save(new Folder("pal-akash", "Family", "blue"));
+		folderRepository.save(new Folder("pal-akash", "Home", "green"));
+		folderRepository.save(new Folder("pal-akash", "Work", "yellow"));
 
 		for (int i=0; i<10; i++){
-			EmailListItemKey key = new EmailListItemKey();
-			key.setId("pal-akash");
-			key.setLabel("Inbox");
-			key.setTimeUUID(Uuids.timeBased());
-
-			EmailListItem item = new EmailListItem();
-			item.setKey(key);
-			item.setTo(Arrays.asList("pal-akash", "abc", "def"));
-			item.setSubject("Subject " + i);
-			item.setUnread(true);
-
-
-
-			emailListItemRepository.save(item);
-
-			Email email = new Email();
-			email.setId(key.getTimeUUID());
-			email.setFrom("pal-akash");
-			email.setSubject(item.getSubject());
-			email.setBody("Body " + i);
-			email.setTo(item.getTo());
-			emailRepository.save(email);
+			emailService.sendEmail("pal-akash", Arrays.asList("pal-akash", "abc"), "Hello " + i, "Howdy!");
 		}
 
 	}

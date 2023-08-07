@@ -55,7 +55,7 @@ public class EmailListItem {
     }
 
     public void setUnread(Boolean unread) {
-        isUnread = unread;
+        this.isUnread = unread;
     }
 
     public String getAgoTimeString() {
@@ -65,4 +65,5 @@ public class EmailListItem {
     public void setAgoTimeString(String agoTimeString) {
         this.agoTimeString = agoTimeString;
     }
+
 }
