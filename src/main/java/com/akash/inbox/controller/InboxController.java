@@ -47,6 +47,7 @@ public class InboxController {
         List<Folder> defaultFolders = folderService.fetchDefaultFolder(userId);
         model.addAttribute("defaultFolders", defaultFolders);
         model.addAttribute("stats", folderService.mapCountToLabels(userId));
+        model.addAttribute("userName", principal.getAttribute("name"));
 
 
         //Fetch messages

@@ -1,15 +1,9 @@
 package com.akash.inbox;
 
-import com.akash.inbox.email.Email;
-import com.akash.inbox.email.EmailRepository;
 import com.akash.inbox.email.EmailService;
-import com.akash.inbox.emailList.EmailListItem;
-import com.akash.inbox.emailList.EmailListItemKey;
-import com.akash.inbox.emailList.EmailListItemRepository;
 import com.akash.inbox.folders.Folder;
 import com.akash.inbox.folders.FolderRepository;
 import com.akash.inbox.folders.UnreadEmailStatsRepository;
-import com.datastax.oss.driver.api.core.uuid.Uuids;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
