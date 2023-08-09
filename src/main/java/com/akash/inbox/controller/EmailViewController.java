@@ -2,6 +2,7 @@ package com.akash.inbox.controller;
 
 import com.akash.inbox.email.Email;
 import com.akash.inbox.email.EmailRepository;
+import com.akash.inbox.email.EmailService;
 import com.akash.inbox.emailList.EmailListItem;
 import com.akash.inbox.emailList.EmailListItemKey;
 import com.akash.inbox.emailList.EmailListItemRepository;
@@ -42,6 +43,9 @@ public class EmailViewController {
     @Autowired
     private UnreadEmailStatsRepository unreadEmailStatsRepository;
 
+    @Autowired
+    private EmailService emailService;
+
 
 
     @GetMapping(value = "/emails/{id}")
@@ -68,7 +72,7 @@ public class EmailViewController {
         String toIds = String.join(",", email.getTo());
 
         //Check if user is allowed to see the email i.e. users other than sender and receivers
-        if(!userId.equals(email.getFrom()) && !email.getTo().contains(userId)){
+        if(!emailService.doesHaveAccess(email, userId)){
             return "redirect:/";
         }
 
