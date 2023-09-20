@@ -1,3 +1,6 @@
 # Git-Inbox
 
-Allows user to message each other using their GitHub user name. 
+## Tech stack used - 
+Spring Boot and Apache Cassandra in the backend. 
+Thymeleaf in the frontend.
+Authentication via GitHub-auth.
